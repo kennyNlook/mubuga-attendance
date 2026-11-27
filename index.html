@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mubuga TSS Attendance</title>
+<link rel="stylesheet" href="landing.css">
+</head>
+<body>
+<header class="nav">
+  <div class="wrap navin">
+    <a class="brand" href="#top"><img id="logoR" alt=""><span>Mubuga TSS <em>Attendance</em></span></a>
+    <nav><a href="#how">How it works</a><a href="#roles">Who uses it</a><a href="#features">Features</a><a href="#login" class="btn sm">Sign in</a></nav>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="wrap heroin">
+    <div class="copy">
+      <p class="kicker">Mubuga Technical Secondary School · 2026–2027</p>
+      <h1>Every class. Every day.<br><span>Accounted for.</span></h1>
+      <p class="lead">Class chiefs record attendance in seconds. Teachers see every class, correct any record and print the weekly report on the school letterhead.</p>
+      <div class="stats">
+        <div><b id="nClasses">11</b><span>classes</span></div>
+        <div><b id="nStudents">352</b><span>trainees</span></div>
+        <div><b>5</b><span>days a week</span></div>
+      </div>
+    </div>
+
+    <form class="login" id="login" autocomplete="off">
+      <div class="lhead"><img id="logoL" alt=""><div><h2>Sign in</h2><p>Class chiefs and teachers</p></div></div>
+      <div id="continue" hidden><p>You are signed in as <b id="who"></b>.</p><a class="btn" href="app.html">Continue to attendance →</a><button type="button" class="link" id="signout">Sign out</button></div>
+      <div id="fields">
+        <label>Username<input id="u" placeholder="e.g. chief.l3elta" autocapitalize="none" spellcheck="false" required></label>
+        <label>Password
+          <span class="pw"><input id="p" type="password" placeholder="Your password" required><button type="button" id="eye" aria-label="Show password">Show</button></span>
+        </label>
+        <p class="err" id="err" role="alert" hidden></p>
+        <button class="btn block">Sign in</button>
+        <p class="small">Forgot your password? Ask a teacher to reset it.</p>
+      </div>
+    </form>
+  </div>
+</section>
+
+<section id="how" class="band">
+  <div class="wrap">
+    <h2>Three steps, every week</h2>
+    <div class="steps">
+      <div><i>1</i><h3>Chief marks the register</h3><p>Each class chief signs in and marks Present, Absent, Late or Excused for the day.</p></div>
+      <div><i>2</i><h3>The record is locked</h3><p>Once saved, the chief can't change it. Only a teacher can correct a mark, so the register stays honest.</p></div>
+      <div><i>3</i><h3>Teacher reviews &amp; prints</h3><p>Teachers see all classes at once, fix mistakes and download the weekly PDF report.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="roles" class="wrap roles">
+  <h2>Who uses it</h2>
+  <div class="two">
+    <article class="role">
+      <span class="tag">Class chief</span>
+      <h3>Mark your own class</h3>
+      <ul><li>One account per class, with a default password</li><li>Mark today's attendance only for your class</li><li>Marks are final once saved</li><li>Change your password after first sign-in</li></ul>
+    </article>
+    <article class="role dark">
+      <span class="tag">Teacher</span>
+      <h3>Oversee every class</h3>
+      <ul><li>See and edit all 11 classes</li><li>Weekly summary across the whole school</li><li>PDF reports with the school heading</li><li>Reset passwords and add teacher accounts</li></ul>
+    </article>
+  </div>
+</section>
+
+<section id="features" class="band alt">
+  <div class="wrap">
+    <h2>Built for a busy school day</h2>
+    <div class="feats">
+      <div><b>⚡</b><h3>Fast to mark</h3><p>Tap a day heading to mark everyone present, then change only the absentees.</p></div>
+      <div><b>🔒</b><h3>Tamper-resistant</h3><p>Chiefs can't edit saved marks. Passwords are stored as hashes, never as plain text.</p></div>
+      <div><b>📄</b><h3>Weekly PDF</h3><p>Letterhead, class totals, absentees by day and signature lines.</p></div>
+      <div><b>📊</b><h3>Term totals</h3><p>Weekly and running absence counts for every trainee.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <b>MUBUGA TECHNICAL SECONDARY SCHOOL</b>
+    <span>KARONGI-MUBUGA · 0783239310, 0786244537 · mubugatss@gmail.com</span>
+    <small>Innovation · Discipline · Resilience</small>
+  </div>
+</footer>
+
+<script src="data.js"></script><script src="logos.js"></script><script src="accounts.js"></script><script src="auth.js"></script>
+<script>
+(()=>{
+const $=s=>document.querySelector(s);
+$('#logoL').src=LOGO_RIGHT;$('#logoR').src=LOGO_RIGHT;
+const cl=Object.values(INITIAL_CLASSES);
+$('#nClasses').textContent=cl.length;$('#nStudents').textContent=cl.reduce((n,l)=>n+l.length,0);
+const show=()=>{const s=Auth.session();$('#continue').hidden=!s;$('#fields').hidden=!!s;if(s)$('#who').textContent=s.name};
+show();
+$('#signout').onclick=()=>{Auth.logout();show()};
+$('#eye').onclick=()=>{const p=$('#p'),h=p.type==='password';p.type=h?'text':'password';$('#eye').textContent=h?'Hide':'Show'};
+$('#login').onsubmit=e=>{
+  e.preventDefault();
+  const s=Auth.login($('#u').value,$('#p').value);
+  if(!s){const er=$('#err');er.textContent='Wrong username or password. Please try again.';er.hidden=false;$('#p').select();return}
+  location.href='app.html';
+};
+})();
+</script>
+</body>
+</html>

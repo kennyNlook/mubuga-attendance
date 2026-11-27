@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Attendance Register</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header class="top">
+    <div class="brand"><span class="logo">✓</span><div><h1>Student Attendance</h1><small id="school"></small></div></div>
+    <div class="controls">
+      <div class="user"><span id="userBadge"></span><button id="pwBtn" class="pwbtn">🔑 Change password</button><button id="outBtn" class="ghost">Sign out</button></div>
+      <label>Class <select id="classSel"></select></label>
+      <div class="weekNav">
+        <button id="prevWk" title="Previous week">‹</button>
+        <label class="weekLbl"><span id="weekText"></span><input type="date" id="datePick"></label>
+        <button id="nextWk" title="Next week">›</button>
+        <button id="thisWk" class="ghost">This week</button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button data-tab="register" class="on">Register</button>
+    <button data-tab="summary">Weekly summary</button>
+    <button data-tab="manage">Students &amp; data</button>
+    <button data-tab="accounts">Accounts</button>
+    <button id="expMarks" class="ghost" hidden>⬇ Export my marks</button>
+    <span class="grow"></span>
+    <button id="pdfClass" class="primary">⬇ PDF: this class</button>
+    <button id="pdfAll">⬇ PDF: all classes</button>
+  </nav>
+
+  <main>
+    <section id="v-register">
+      <div class="bar">
+        <input id="search" type="search" placeholder="Search student…">
+        <div class="legend">
+          <span><i class="chip P">P</i> Present</span><span><i class="chip A">A</i> Absent</span>
+          <span><i class="chip L">L</i> Late</span><span><i class="chip E">E</i> Excused</span>
+          <small>Tap a cell to change · tap a day heading to mark everyone present</small>
+        </div>
+      </div>
+      <p class="note" id="chiefNote" hidden></p>
+      <div class="stats" id="stats"></div>
+      <div class="tableWrap"><table id="reg"></table></div>
+    </section>
+
+    <section id="v-summary" hidden>
+      <p class="hint">All classes for the selected week. Click a row to open that class.</p>
+      <div class="tableWrap"><table id="sum"></table></div>
+    </section>
+
+    <section id="v-manage" hidden>
+      <div class="cards">
+        <div class="card">
+          <h3>Add student to <span id="mClass"></span></h3>
+          <form id="addForm"><input id="addName" placeholder="Full name" required>
+            <select id="addSex"><option>F</option><option>M</option></select>
+            <button class="primary">Add</button></form>
+          <div class="tableWrap short"><table id="roster"></table></div>
+        </div>
+        <div class="card">
+          <h3>Backup &amp; restore</h3>
+          <p class="hint">Attendance is saved automatically in this browser. Download a backup to keep it safe or move it to another computer.</p>
+          <button id="exportBtn">⬇ Download backup (.json)</button>
+          <label class="fileBtn">⬆ Restore backup<input type="file" id="importFile" accept=".json"></label>
+          <label class="fileBtn">⬆ Import class marks from a chief<input type="file" id="importMarks" accept=".json"></label>
+          <p class="hint">Merges a chief's exported marks. It only fills empty cells, so it never overwrites a teacher's corrections.</p>
+          <button id="clearWeek" class="danger">Clear this week (this class)</button>
+        </div>
+      </div>
+    </section>
+    <section id="v-accounts" hidden>
+      <div class="cards">
+        <div class="card">
+          <h3>Class chief accounts</h3>
+          <p class="hint">Chiefs mark their own class only; saved marks are locked.</p>
+          <div class="tableWrap short"><table id="accChief"></table></div>
+          <button id="resetAllChiefs" class="danger">Reset ALL chief passwords &amp; download list</button>
+        </div>
+        <div class="card">
+          <h3>Teacher accounts</h3>
+          <form id="addTeacher"><input id="tName" placeholder="Teacher name" required><button class="primary">Add teacher</button></form>
+          <div class="tableWrap short"><table id="accTeach"></table></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+<dialog id="pwDlg"><form method="dialog" id="pwForm"><h3>Change password</h3>
+  <p class="hint" id="pwMsg"></p>
+  <label>Current password<input type="password" id="pwOld" required></label>
+  <label>New password (min. 6 characters)<input type="password" id="pwNew" required minlength="6"></label>
+  <label>Repeat new password<input type="password" id="pwNew2" required></label>
+  <p class="err" id="pwErr" hidden></p>
+  <div class="row"><button type="button" id="pwCancel">Cancel</button><button class="primary" value="ok">Save</button></div></form></dialog>
+<dialog id="revealDlg"><h3 id="rvTitle">New credentials</h3><p class="hint">Write these down now. The password cannot be shown again.</p>
+  <div class="cred"><span>Username</span><b id="rvU"></b><span>Password</span><b id="rvP"></b></div>
+  <div class="row"><button id="rvCopy">Copy</button><button class="primary" id="rvClose">Done</button></div></dialog>
+<div id="popover" hidden></div>
+<div id="printArea"></div>
+<div id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script src="data.js"></script>
+<script src="accounts.js"></script>
+<script src="auth.js"></script>
+<script src="logos.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
